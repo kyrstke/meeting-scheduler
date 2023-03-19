@@ -1,2 +1,28 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+
+<script lang="ts">
+
+    import Navbar from '../components/Navbar.svelte';
+    import Footer from '../components/Footer.svelte';
+    import Datepicker from '../components/Datepicker.svelte';
+    import Content from '../components/Content.svelte';
+
+    import {
+        Button
+    } from 'flowbite-svelte';
+
+</script>
+
+
+
+<!-- <Toast color="green" class="mb-2">
+    <svelte:fragment slot="icon">
+        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+        <span class="sr-only">Check icon</span>
+    </svelte:fragment>
+    Item moved successfully.
+</Toast> -->
+
+<Navbar />
+<Datepicker />
+<Content />
+<Footer />
