@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.panel {
+    @apply bg-red-400 shadow-sm rounded-sm overflow-hidden w-20 h-4 m-0.5;
+}
+
+#event-name-input {
+    width: 30rem;
+}
+
+.title {
+    border: 1px solid #abc;
+}
