@@ -3,14 +3,14 @@
 
     import Title from '../components/Title.svelte';
     import { Label, Input, Button, ButtonGroup, Datepicker, Heading, P } from 'flowbite-svelte';
-    import { XMark } from 'svelte-heros';
+    // import { XMark } from 'svelte-heros';
 
-    let ranges_no = 0;
+    // let ranges_no = 0;
 
-    function add_range() {
-        ranges_no++;
-        console.log(ranges_no);
-    }
+    // function add_range() {
+    //     ranges_no++;
+    //     console.log(ranges_no);
+    // }
 
 </script>
 
@@ -53,7 +53,7 @@
                     <Label for="datepicker" class="mb-2">Range</Label>
                     <Datepicker range />  
                 </div>
-                {#each Array(ranges_no) as _, i}
+                <!-- {#each Array(ranges_no) as _, i}
                     <div class="mb-6">
                         <div class="flex justify-between">
                             <Label for="datepicker" class="mb-2">Range {i + 2}</Label>
@@ -61,10 +61,10 @@
                         </div>
                         <Datepicker range/>
                     </div>
-                {/each}
+                {/each} -->
                 <div class="mt-8 flex justify-between">
-                    <Button color="alternative" type="button" on:click={add_range}>Add another range</Button>
-                    <Button type="submit">Next</Button>
+                    <!-- <Button color="alternative" type="button" on:click={add_range}>Add another range</Button> -->
+                    <Button type="submit" class="mt-4 w-full">Next</Button>
                 </div>
             </form>
         </div>
