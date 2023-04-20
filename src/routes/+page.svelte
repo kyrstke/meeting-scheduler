@@ -1,13 +1,13 @@
 
 <script lang="ts">
-
+    import Panel from '../components/Panel.svelte';
     import Title from '../components/Title.svelte';
     import { Label, Input, Button, Datepicker, Heading, P, CloseButton } from 'flowbite-svelte';
     // import { XMark } from 'svelte-heros';
 
     let ranges_no = 0;
-    let start_hour = 9;
-    let end_hour = 22;
+    let start_hour = 10;
+    let end_hour = 18;
 
     const handleNextButton = () => {
         console.log('Next');
@@ -23,25 +23,22 @@
 <Title />
 
 <section class="bg-white dark:bg-gray-900">
-    <div class="flex py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-        <div class="-mt-4 mr-1">
+    <div class="flex py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 justify-center">
+        <div class="grid grid-cols-2 text-sm">
             {#each arrayRange as hour}
-                <div class="flex flex-col dark:text-gray-400">
-                    <div class="mb-3">{hour}:00</div>
+                <div class="flex flex-col dark:text-gray-400 pl-5">
+                    <div class="-mt-3 mb-3.5">{hour}:00</div>
+                    <div class="">{hour}:30</div>
                 </div>
-            {/each}
-            <div class="dark:text-gray-400">
-                <div>{end_hour}:00</div>
-            </div>
-        </div>
-        <div class="">
-            {#each arrayRange as _}
-                <div class="flex flex-wrap flex-col mb-0.5">
-                    {#each Array(2) as _}
-                        <div class="bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 rounded overflow-hidden w-16 h-3 m-0.5"></div>
+                <div class="flex flex-wrap flex-col mb-025">
+                    {#each Array(4) as _}
+                        <Panel></Panel>
                     {/each}
                 </div>
             {/each}
+            <div class="dark:text-gray-400 -mt-3 pl-5">
+                <div>{end_hour}:00</div>
+            </div>
         </div>
     </div>
 </section>
@@ -79,3 +76,12 @@
         </div>
     </div>
 </section>
+
+<style>
+    .mb-025 {
+        margin-bottom: 1px;
+    }
+    .-mt-35 {
+        margin-top: -12px;
+    }
+</style>
