@@ -7,13 +7,13 @@
     // import { XMark } from 'svelte-heros';
 
     // let ranges_no = 0;
-    let start_hour = 0;
-    let end_hour = 24;
+    let start_hour = 8;
+    let end_hour = 16;
 
     let start_hour_dropdown_open = false;
     let end_hour_dropdown_open = false;
 
-    let days: number = 6;
+    let days: number = 3;
 
     let form_active: boolean = false;
 
@@ -111,24 +111,24 @@
 
 {#if !form_active}
     <section class="bg-white dark:bg-gray-900">
-        <div class="flex py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 justify-center">
-            <div class="grid grid-cols-{days+1} text-sm">
-                <div class="col-span-1 text-right mr-2">
+        <div class="flex py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 justify-center border border-stone-200">
+            <div class="HOURS-AND-PANELS flex text-sm">
+                <div class="HOURS flex flex-col text-right mr-2">
                     {#each arrayRange as hour}
-                        <div class="flex flex-col dark:text-gray-400 pl-5 h-17">
+                        <div class="HALF-HOURS flex flex-col dark:text-gray-400 pl-5 h-17">
                             <div class="-mt-3 mb-3.5">{hour}:00</div>
                             <div class="">{hour}:30</div>
                         </div>
                     {/each}
-                    <div class="dark:text-gray-400 -mt-3 pl-5">
+                    <div class="LAST-HOUR dark:text-gray-400 -mt-3 pl-5">
                         <div>{end_hour}:00</div>
                     </div>
                 </div>
-                <div class="col-span-{days} grid grid-cols-{days}">
+                <div class="PANELS flex">
                     {#each Array(days) as _}
                         <div class="mr-1">
                             {#each arrayRange as _}
-                                <div class="flex flex-wrap flex-col mb-025">
+                                <div class="flex flex-col mb-px">
                                     {#each Array(4) as mn}
                                         <Panel date={DateTime.now()}/>
                                     {/each}
@@ -143,10 +143,6 @@
 {/if}
 
 <style>
-    .mb-025 {
-        margin-bottom: 1px;
-    }
-
     .h-17 {
         height: 4.3125rem;
     }
