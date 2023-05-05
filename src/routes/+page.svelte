@@ -17,6 +17,9 @@
 
     let form_active: boolean = false;
 
+    let start_date: DateTime = DateTime.now().setLocale('pl');
+    let end_date: DateTime = DateTime.now().setLocale('pl').plus({days: days});
+
     const onSubmit = (e: any) => {
         const formData = new FormData(e.target);
 
@@ -27,8 +30,8 @@
         }
         console.log(data);
 
-        const start_date = DateTime.fromFormat(data.start, 'MM/dd/yyyy');
-        const end_date = DateTime.fromFormat(data.end, 'MM/dd/yyyy');
+        start_date = DateTime.fromFormat(data.start, 'MM/dd/yyyy');
+        end_date = DateTime.fromFormat(data.end, 'MM/dd/yyyy');
 
         console.log(start_date, "start_date");
         console.log(end_date, "end_date");
@@ -111,26 +114,27 @@
 
 {#if !form_active}
     <section class="bg-white dark:bg-gray-900">
-        <div class="flex py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 justify-center border border-stone-200">
-            <div class="HOURS-AND-PANELS flex text-sm">
+        <div class="flex py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 justify-center">
+            <div class="HOURS-AND-PANELS flex text-sm dark:text-gray-400">
                 <div class="HOURS flex flex-col text-right mr-2">
                     {#each arrayRange as hour}
-                        <div class="HALF-HOURS flex flex-col dark:text-gray-400 pl-5 h-17">
+                        <div class="HALF-HOURS flex flex-col pl-5 h-17">
                             <div class="-mt-3 mb-3.5">{hour}:00</div>
                             <div class="">{hour}:30</div>
                         </div>
                     {/each}
-                    <div class="LAST-HOUR dark:text-gray-400 -mt-3 pl-5">
+                    <div class="LAST-HOUR -mt-3 pl-5">
                         <div>{end_hour}:00</div>
                     </div>
                 </div>
                 <div class="PANELS flex">
-                    {#each Array(days) as _}
-                        <div class="mr-1">
-                            {#each arrayRange as _}
+                    {#each Array(days) as _, day}
+                        <div class="-mt-7 mr-1 text-center">
+                            <div class="mb-2">{start_date.plus({days: day}).toLocaleString({day: 'numeric', month: 'numeric'})}</div>
+                            {#each arrayRange as hour}
                                 <div class="flex flex-col mb-px">
-                                    {#each Array(4) as mn}
-                                        <Panel date={DateTime.now()}/>
+                                    {#each Array(4) as _, minute}
+                                        <Panel id="{day} {hour} {minute}"/>
                                     {/each}
                                 </div>
                             {/each}
