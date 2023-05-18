@@ -8,7 +8,7 @@
 </script>
 
 <Footer class="rounded-none">
-    <FooterCopyright href="/" by="Krystian Jakusik & Dawid Bosy" year={2023} />
+    <FooterCopyright href="https://github.com/kyrstke/meeting-scheduler" by="Krystian Jakusik & Dawid Bosy" year={2023} />
     <FooterLinkGroup ulClass="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
         <FooterLink href="/">About</FooterLink>
         <FooterLink href="/">Privacy Policy</FooterLink>
