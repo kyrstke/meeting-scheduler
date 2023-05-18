@@ -15,7 +15,7 @@
 
     let days: number = 3;
 
-    let form_active: boolean = false;
+    let form_active: boolean = true;  // false to omit the form and use default values
 
     let start_date: DateTime = DateTime.now().setLocale('pl');
     let end_date: DateTime = DateTime.now().setLocale('pl').plus({days: days});
@@ -46,7 +46,7 @@
         form_active = false;
     }
 
-    const arrayRange = Array.from(
+    const arrayRange = () => Array.from(
             { length: (end_hour - start_hour) },
             (_, index) => start_hour + index
         );
@@ -117,7 +117,7 @@
         <div class="flex py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 justify-center">
             <div class="HOURS-AND-PANELS flex text-sm dark:text-gray-400">
                 <div class="HOURS flex flex-col text-right mr-2">
-                    {#each arrayRange as hour}
+                    {#each arrayRange() as hour}
                         <div class="HALF-HOURS flex flex-col pl-5 h-17">
                             <div class="-mt-3 mb-3.5">{hour}:00</div>
                             <div class="">{hour}:30</div>
@@ -131,7 +131,7 @@
                     {#each Array(days) as _, day}
                         <div class="-mt-7 mr-1 text-center">
                             <div class="mb-2">{start_date.plus({days: day}).toLocaleString({day: 'numeric', month: 'numeric'})}</div>
-                            {#each arrayRange as hour}
+                            {#each arrayRange() as hour}
                                 <div class="flex flex-col mb-px">
                                     {#each Array(4) as _, minute}
                                         <Panel id="{day} {hour} {minute}"/>
@@ -145,6 +145,7 @@
         </div>
     </section>
 {/if}
+
 
 <style>
     .h-17 {
