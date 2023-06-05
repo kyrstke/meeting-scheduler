@@ -7,16 +7,24 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  url      = "mongodb+srv://MeetingScheduler:87Nv6n0plzPE7sYu@meetingscheduler.hefk4pb.mongodb.net/MeetingScheduler?retryWrites=true&w=majority"
 }
 
 model Event {
-  id            String     @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt     DateTime   @default(now())
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId //
+  createdAt     DateTime   @default(now()) //date from now
   name          String
   start_date    DateTime
   end_date      DateTime
   min_hour      Int
   max_hour      Int
-  availability  String
+  users         String[]
+  availability  DayAvailability[]
+}
+
+model DayAvailability {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  hourAvailability Int[]
+  event Event? @relation(fields: [eventId],references: [id])
+  eventId String? @db.ObjectId
 }

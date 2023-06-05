@@ -9,42 +9,13 @@
     // let ranges_no = 0;
     let start_hour = 8;
     let end_hour = 16;
-
     let start_hour_dropdown_open = false;
     let end_hour_dropdown_open = false;
 
     let days: number = 3;
 
-    let form_active: boolean = true;  // false to omit the form and use default values
-
     let start_date: DateTime = DateTime.now().setLocale('pl');
     let end_date: DateTime = DateTime.now().setLocale('pl').plus({days: days});
-
-    const onSubmit = (e: any) => {
-        const formData = new FormData(e.target);
-
-        const data:any = {};
-        for (let field of formData) {
-            const [key, value] = field;
-            data[key] = value; 
-        }
-        console.log(data);
-
-        start_date = DateTime.fromFormat(data.start, 'MM/dd/yyyy');
-        end_date = DateTime.fromFormat(data.end, 'MM/dd/yyyy');
-
-        console.log(start_date, "start_date");
-        console.log(end_date, "end_date");
-
-        const diff = end_date.diff(start_date, 'days').toObject().days;
-
-        days = diff ? diff+1 : 1;
-        console.log(days, "days");
-
-        // const start_date = DateTime(data.start)
-
-        form_active = false;
-    }
 
     const arrayRange = () => Array.from(
             { length: (end_hour - start_hour) },
@@ -54,8 +25,6 @@
 </script>
 
 <Title />
-
-{#if form_active}
     <section class="bg-white dark:bg-gray-900 mb-auto">
         <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
             <div class="text-center flex flex-wrap justify-center">
@@ -63,7 +32,7 @@
                 <P class="mb-6 text-lg lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Find the best time for your meeting quicker than ever before</P>
             </div>
             <div class="flex justify-center">
-                <form on:submit|preventDefault={onSubmit}>
+                <form method="POST">
                     <div class="mb-6">
                         <Label for="event_name" class="mb-2">Event name</Label>
                         <Input type="text" id="event_name" name="event_name" placeholder="My event" required />
@@ -76,7 +45,7 @@
                     <div class="flex justify-center mb-4">
                         <div class="flex items-center justify-center mr-20">
                             <Label class="mb-2 mr-2">From</Label>
-                            <Button color="dark">{start_hour}:00</Button>
+                            <Input type=number id="start_hour" name="start_hour" bind:value={start_hour}/>
                             <Dropdown bind:open={start_hour_dropdown_open} class="w-48 overflow-y-auto py-1 h-48">
                                 {#each Array(24) as _, i}
                                     <DropdownItem on:click={() => {start_hour = i; start_hour_dropdown_open = false;}}>{i}:00</DropdownItem>
@@ -85,7 +54,7 @@
                         </div>
                         <div class="flex items-center justify-center">
                             <Label class="mb-2 mr-2">To</Label>
-                            <Button color="dark">{end_hour}:00</Button>
+                            <Input type=number id="end_hour" name="end_hour" bind:value={end_hour}/>
                             <Dropdown bind:open={end_hour_dropdown_open} class="w-48 overflow-y-auto py-1 h-48">
                                 {#each Array(24) as _, i}
                                     <DropdownItem on:click={() => {end_hour = i; end_hour_dropdown_open = false;}}>{i}:00</DropdownItem>
@@ -104,48 +73,13 @@
                     {/each} -->
                     <div class="mt-4 flex justify-between">
                         <!-- <Button color="alternative" type="button" on:click={() => {ranges_no++}}>Add another range</Button> -->
-                        <Button type="submit" class="mt-4 w-full">Next</Button>
+                        
                     </div>
+                    <Button type="submit" class="mt-4 w-full">Next</Button>
                 </form>
             </div>
         </div>
     </section>
-{/if}
-
-{#if !form_active}
-    <section class="bg-white dark:bg-gray-900">
-        <div class="flex py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6 justify-center">
-            <div class="HOURS-AND-PANELS flex text-sm dark:text-gray-400">
-                <div class="HOURS flex flex-col text-right mr-2">
-                    {#each arrayRange() as hour}
-                        <div class="HALF-HOURS flex flex-col pl-5 h-17">
-                            <div class="-mt-3 mb-3.5">{hour}:00</div>
-                            <div class="">{hour}:30</div>
-                        </div>
-                    {/each}
-                    <div class="LAST-HOUR -mt-3 pl-5">
-                        <div>{end_hour}:00</div>
-                    </div>
-                </div>
-                <div class="PANELS flex">
-                    {#each Array(days) as _, day}
-                        <div class="-mt-7 mr-1 text-center">
-                            <div class="mb-2">{start_date.plus({days: day}).toLocaleString({day: 'numeric', month: 'numeric'})}</div>
-                            {#each arrayRange() as hour}
-                                <div class="flex flex-col mb-px">
-                                    {#each Array(4) as _, minute}
-                                        <Panel id="{day} {hour} {minute}"/>
-                                    {/each}
-                                </div>
-                            {/each}
-                        </div>
-                    {/each}
-                </div>
-            </div>
-        </div>
-    </section>
-{/if}
-
 
 <style>
     .h-17 {
