@@ -1,17 +1,22 @@
 <script lang="ts">
-    import Panel from "../../components/Panel.svelte";
+    import Navbar from '../../../components/Navbar.svelte';
+    import Footer from '../../../components/Footer.svelte';
+    import Panel from '../../../components/Panel.svelte';
+    import { Label, Input, Button, Datepicker, Heading, P, CloseButton, Dropdown, DropdownItem, } from 'flowbite-svelte';
 	import { DateTime } from "luxon";
-    let start_hour = 8;
-    let end_hour = 16;
-    let days: number = 3;
-    let start_date: DateTime = DateTime.now().setLocale('pl');
+    import type { PageData } from './$types';
+    export let data: PageData;
+    console.log("Value info: ");
+    let start_hour = data.min_hour;
+    let end_hour = data.max_hour;
+    let start_date = data.start_date;
+    let end_date = data.end_date;
+    let days = (data.end_date - data.start_date)/(1000*3600*24)+1;
 
-    
     const arrayRange = () => Array.from(
             { length: (end_hour - start_hour) },
             (_, index) => start_hour + index
         );
-
 </script>
 
 
@@ -37,7 +42,7 @@
                 <div class="PANELS flex">
                     {#each Array(days) as _, day}
                         <div class="-mt-7 mr-1 text-center">
-                            <div class="mb-2">{start_date.plus({days: day}).toLocaleString({day: 'numeric', month: 'numeric'})}</div>
+                            <div class="mb-2">{new Date(end_date.getTime()+3600*24*1000*day).toLocaleDateString()}</div>
                             {#each arrayRange() as hour}
                                 <div class="flex flex-col mb-px">
                                     {#each Array(4) as _, minute}

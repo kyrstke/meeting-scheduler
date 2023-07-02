@@ -42,4 +42,12 @@ export const actions =  {
 
     });
     }
+    // load: async() => {
+    // const event = await prisma.event.findUnique({
+    //     where:{
+    //         id: "64a1507d7aac7e7a86cf3871"
+    //     }
+    // })
+    // return event;
+    // }
 } satisfies Actions;

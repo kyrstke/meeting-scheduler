@@ -18,6 +18,10 @@
 	let end_hour_dropdown_open = false;
 
 	let days: number = 3;
+	function redirect() {
+		window.location.href = "/event/" + '64a1507d7aac7e7a86cf3871';
+	}
+
 
 	let start_date: DateTime = DateTime.now().setLocale('pl');
 	let end_date: DateTime = DateTime.now().setLocale('pl').plus({ days: days });
@@ -87,7 +91,7 @@
 				<div class="mt-4 flex justify-between">
 					<!-- <Button color="alternative" type="button" on:click={() => {ranges_no++}}>Add another range</Button> -->
 				</div>
-				<Button type="submit" class="mt-4 w-full">Create</Button>
+				<Button type="submit" class="mt-4 w-full" on:click="{redirect()}">Create</Button>
 			</form>
 		</div>
 	</div>
