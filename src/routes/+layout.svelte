@@ -2,6 +2,7 @@
     import "../app.css";
     import Navbar from '../components/Navbar.svelte';
     import Footer from '../components/Footer.svelte';
+    export let start_hour;
 </script>
 
 
