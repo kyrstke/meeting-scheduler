@@ -1,8 +1,5 @@
 <script lang="ts">
-    import Navbar from '../../components/Navbar.svelte';
-    import Footer from '../../components/Footer.svelte';
     import Panel from "../../components/Panel.svelte";
-    import { Label, Input, Button, Datepicker, Heading, P, CloseButton, Dropdown, DropdownItem, } from 'flowbite-svelte';
 	import { DateTime } from "luxon";
     let start_hour = 8;
     let end_hour = 16;
