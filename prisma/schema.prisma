@@ -19,12 +19,6 @@ model Event {
   min_hour      Int
   max_hour      Int
   users         String[]
-  availability  DayAvailability[]
+  availability  Int[]
 }
 
-model DayAvailability {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  hourAvailability Int[]
-  event Event? @relation(fields: [eventId],references: [id])
-  eventId String? @db.ObjectId
-}

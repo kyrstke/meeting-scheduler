@@ -75,7 +75,7 @@
                         <!-- <Button color="alternative" type="button" on:click={() => {ranges_no++}}>Add another range</Button> -->
                         
                     </div>
-                    <Button type="submit" class="mt-4 w-full">Next</Button>
+                    <Button type="submit" class="mt-4 w-full" href="/event">Next</Button>
                 </form>
             </div>
         </div>

@@ -2,7 +2,6 @@ import prisma from "$lib/prisma.js";
 import type { Actions } from './$types.js';
 import { DateTime } from "luxon";
 
-
 // 1.
 
 export const actions =  {
@@ -22,12 +21,9 @@ export const actions =  {
         let days = diff ? diff+1 : 1;
 
         let hour_count = parseInt(data.end_hour)-parseInt(data.start_hour);
-        let avail:number[][] = [];
-        for (let i =0;i<days;i++){
-            avail[i]= [];
-            for (let r=0;r< hour_count;r++){
-                avail[i][r] = 0;
-            }
+        let avail:number[] = [];
+        for (let i =0;i<days*hour_count;i++){
+            avail[i] = 0;
         }
         
 
@@ -41,11 +37,9 @@ export const actions =  {
             min_hour: parseInt(data.start_hour),
             max_hour: parseInt(data.end_hour),
             users: [],
-            availability: {create:[ avail
-            ]}
+            availability: avail
         }
 
     });
-    window.location.href = "/event";
     }
 } satisfies Actions;
