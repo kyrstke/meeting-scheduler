@@ -6,7 +6,6 @@
 	import { DateTime } from "luxon";
     import type { PageData } from './$types';
     export let data: PageData;
-    console.log("Value info: ");
     let start_hour = data.min_hour;
     let end_hour = data.max_hour;
     let start_date = data.start_date;
@@ -58,6 +57,9 @@
     </section>
 
 </main>
+    <div class="text-center">
+        <Button>Send my availability</Button>
+    </div>
 
 
 

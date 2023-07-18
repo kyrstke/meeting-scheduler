@@ -1,4 +1,5 @@
 import prisma from "$lib/prisma.js";
+import { redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from './$types.js';
 import { DateTime } from "luxon";
 
@@ -6,14 +7,17 @@ import { DateTime } from "luxon";
 
 
 export const load =  (
-    async () => {
+    async ({params}) => {
     
     // 2.
-    const event = await prisma.event.findUnique({
+    var event = await prisma.event.findUnique({
         where:{
-            id: "64a1507d7aac7e7a86cf3871"
+            id: params.id
         }
     })
+    if (event == null){
+        throw 500;
+    }
     return event;
 
     // 3.

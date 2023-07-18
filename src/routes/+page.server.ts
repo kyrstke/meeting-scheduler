@@ -1,4 +1,5 @@
 import prisma from "$lib/prisma.js";
+import { redirect } from "@sveltejs/kit";
 import type { Actions } from './$types.js';
 import { DateTime } from "luxon";
 
@@ -28,7 +29,7 @@ export const actions =  {
         
 
 
-    await prisma.event.create({
+    const newEvent = await prisma.event.create({
         data: {
             name: data.event_name,
             createdAt:  (DateTime.now()).toString(),
@@ -41,13 +42,7 @@ export const actions =  {
         }
 
     });
+    
+    throw redirect(303,"/event/" + newEvent.id);
     }
-    // load: async() => {
-    // const event = await prisma.event.findUnique({
-    //     where:{
-    //         id: "64a1507d7aac7e7a86cf3871"
-    //     }
-    // })
-    // return event;
-    // }
 } satisfies Actions;
