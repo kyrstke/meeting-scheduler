@@ -4,13 +4,40 @@ import type { Actions, PageServerLoad } from './$types.js';
 import { DateTime } from "luxon";
 import { prevent_default } from "svelte/internal";
 
-// 1.
+function replaceAt(str,index, replacement) {
+    return str.substring(0, index) + replacement + str.substring(index + replacement.length);
+}
+function updateName(oldUsers,name){
+    let newUsers = oldUsers
+    if (newUsers.indexOf(name) == -1){
+        newUsers.push(name);
+    }
+    
+    return newUsers;
+}
+function decToBin(dec){
+    return (dec >>> 0).toString(2);
+}
+function getNewAvailability(value,someoneCan,index){
+    let avail : number[] = [];
+    for (var x in value.availability){
+        let allAvail = decToBin(value.availability[x]);
+        if (someoneCan[x]){
+            allAvail =  replaceAt(allAvail,index,'1');
+        }
+        else{
+            allAvail = replaceAt(allAvail,index,'0');
+        }
+        avail.push(parseInt(allAvail.split("").reverse().join(""),2));
+    }
+    console.log(avail)
+    return avail;
 
+}
 
 export const load =  (
     async ({params}) => {
     
-    // 2.
     var event = await prisma.event.findUnique({
         where:{
             id: params.id
@@ -28,30 +55,31 @@ export const load =  (
  export const actions = {
     update: async ({params,request}) => {
         const data = await request.formData();
-        let user_name = String(data.get("name"));
-        let avail;
+        let user_name = String(data.get("user"));
+        let avail : boolean[] = [];
         for (const key of data.keys()) {
             if (key.includes(':TZ')){
-                avail.push(data.get(key));
+                avail.push(JSON.parse(String(data.get(key))));
             }
-          }
+        }
+        var value =  await prisma.event.findUnique({
+            where:{
+                id: params.id
+            }
+        })
+        var newlist: string[] = updateName(value.users,user_name);
+        let index = newlist.indexOf(user_name);
+        let newAvailability = getNewAvailability(value,avail,index);
+
         var event = await prisma.event.update({
             where:{
                 id: params.id
             },
             data: {
-                users: {
-                    push: user_name,
+                users: newlist,
+                availability: newAvailability
                 },
-                availability: {
-                    set: avail.map(p => ({})) //TODO - update given dates
-                }
-            }
+            
         })
-        for (const key of data.values()) {
-            console.log(key);
-        }
-        console.log("Or not")
-        return false;
     },
   };

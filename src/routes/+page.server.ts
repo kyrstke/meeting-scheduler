@@ -23,7 +23,7 @@ export const actions =  {
 
         let hour_count = parseInt(data.end_hour)-parseInt(data.start_hour);
         let avail:number[] = [];
-        for (let i =0;i<days*hour_count;i++){
+        for (let i =0;i<days*hour_count*4;i++){
             avail[i] = 0;
         }
         
