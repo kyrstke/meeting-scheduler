@@ -17,20 +17,31 @@
     }, 0);
     }
     function calculateIntensity(avail){
-        for (let x =0;x<avail.length;x++){
-            summed[x] = (((sum(decToBin(avail[x]).split("")))/data.users.length)*0.8+0.2);
+        console.log("recalculated")
+        let usersNumber;
+        if (data.users.length == 0){
+            usersNumber = 1;
         }
+        else{
+            usersNumber = data.users.length;
+        }
+        for (let x =0;x<avail.length;x++){
+            summed[x] = (((sum(decToBin(avail[x]).split("")))/usersNumber)*0.8+0.1);
+        }
+    }
+    function endEvent(){
+
     }
 
 
     let user = "";
     let start_hour = data.min_hour;
     let end_hour = data.max_hour;
-    let start_date = data.start_date;
-    let end_date = data.end_date;
-    let days = (data.end_date - data.start_date)/(1000*3600*24)+1;
+    let start_date = data.days[0];
+    let end_date = data.days[data.days.length-1];
+    let days = data.days.length;
     let hours = (end_hour-start_hour)*4
-    let available: boolean[][] = new Array(days)
+    let available: boolean[][] = new Array(data.days.length)
                                    .fill(false)
                                    .map(() => 
                                      new Array(hours).fill(false)
@@ -48,8 +59,6 @@
     
     calculateIntensity(avail); //Values are not updated after every availability send
 </script>
-
-
 
 <main class="min-h-screen flex flex-col bg-white dark:bg-gray-900">
     <div class="flex-grow">
@@ -75,7 +84,7 @@
                 <div class="PANELS flex" >
                     {#each Array(days) as _, day}
                         <div class="-mt-7 mr-1 text-center">
-                            <div class="mb-2">{new Date(end_date.getTime()+3600*24*1000*day).toLocaleDateString()}</div>
+                            <div class="mb-2">{new Date(data.days[day]).toLocaleDateString()}</div>
                             {#each arrayRange() as hour}
                                 <div id='buttons' class="flex flex-col mb-px" >
                                     {#each Array(4) as _, minute}
@@ -88,9 +97,11 @@
                 </div>
             </div>
         </div>
-        <div  class="flex py-8 px-4 lg:py-16 lg:px-6" style="display: inline-block; float: left; width: 20%;  transform: translate(-50%, 0%); text-align: center;">
+        <div  class=" lg:py-16 lg:px-6" style="display: inline-block; float: left; width: 20% ; transform: translate(-50%, 0%); text-align: center;
+         justify-content: space-between;">
             <Input name="user" value={user} placeholder="Name"></Input>
             <Button><button on:click={calculateIntensity}>Send my availability</button></Button>
+            <Button><button on:click={endEvent}> Finish Event</button></Button>
         </div>
         <div class="flex py-8 px-4 lg:py-16 lg:px-6" style="float:right; width: 40%;" >
             <div class="HOURS-AND-PANELS flex text-sm dark:text-gray-400" >
@@ -108,7 +119,7 @@
                 <div class="PANELS flex">
                     {#each Array(days) as _, day}
                         <div class="-mt-7 mr-1 text-center">
-                            <div class="mb-2">{new Date(end_date.getTime()+3600*24*1000*day).toLocaleDateString()}</div>
+                            <div class="mb-2">{new Date(data.days[day]).toLocaleDateString()}</div>
                             {#each arrayRange() as hour}
                                 <div id='buttons' class="flex flex-col mb-px">
                                     {#each Array(4) as _, minute}

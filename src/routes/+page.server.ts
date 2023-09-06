@@ -3,27 +3,59 @@ import { redirect } from "@sveltejs/kit";
 import type { Actions } from './$types.js';
 import { DateTime } from "luxon";
 
+function getDatesInRange(startDate, endDate) {
+    const date = new Date(startDate.getTime());
+    const dates: Date[] =[];
+    while (date <= endDate) {
+        dates.push(new Date(date));
+        date.setDate(date.getDate() + 1);
+    }
+    return dates;
+  }
 // 1.
+function calculateDays(chosenDates){
+    let days: Date[]=[];
+    let newdays:Date[] =[];
+    for (var x = 0;x<chosenDates.length;x=x+2){
+        newdays =getDatesInRange(chosenDates[x],chosenDates[x+1])
+        days.push.apply(days,newdays);
+    }
+    
+    const sorted = days.sort(
+        (objA, objB) => objA.getTime() - objB.getTime(),
+    );
+    let reminder: number []=[];
+        let result = sorted.filter( item =>  {  
+        let date = item.getDate(); 
+        if(reminder.includes(date)) {       
+            return false;                    
+        }
+        reminder.push(date);                
+        return true;                        
+        });
+    return result;
+}
 
 export const actions =  {
     default: async ({request}) => {
         let form = await request.formData();
         
+        
         const data:any = {};
+        let chosenDates :Date[] =[];
         for (let field of form) {
             const [key, value] = field;
             data[key] = value;
+            if (key.includes("range")){
+                chosenDates.push(new Date(String(value)));
+            }
         }
-
-        let start_date = DateTime.fromFormat(data.start, 'MM/dd/yyyy');
-        let end_date = DateTime.fromFormat(data.end, 'MM/dd/yyyy');
-
-        const diff = end_date.diff(start_date, 'days').toObject().days;
-        let days = diff ? diff+1 : 1;
+        
+        let days = calculateDays(chosenDates);
 
         let hour_count = parseInt(data.end_hour)-parseInt(data.start_hour);
         let avail:number[] = [];
-        for (let i =0;i<days*hour_count*4;i++){
+        for (let i =0;i<days.length*hour_count*4;i++){
             avail[i] = 0;
         }
         
@@ -33,10 +65,9 @@ export const actions =  {
         data: {
             name: data.event_name,
             createdAt:  (DateTime.now()).toString(),
-            start_date: start_date.toString(),
-            end_date: end_date.toString(),
             min_hour: parseInt(data.start_hour),
             max_hour: parseInt(data.end_hour),
+            days: days,
             users: [],
             availability: avail
         }

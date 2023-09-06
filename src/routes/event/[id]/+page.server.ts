@@ -30,7 +30,6 @@ function getNewAvailability(value,someoneCan,index){
         }
         avail.push(parseInt(allAvail.split("").reverse().join(""),2));
     }
-    console.log(avail)
     return avail;
 
 }

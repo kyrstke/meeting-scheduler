@@ -11,6 +11,7 @@
 		DropdownItem
 	} from 'flowbite-svelte';
 	import { DateTime } from 'luxon';
+	import {DateInput} from 'date-picker-svelte';
 
 	let start_hour = 8;
 	let end_hour = 16;
@@ -18,10 +19,9 @@
 	let end_hour_dropdown_open = false;
 
 	let days: number = 3;
+	let ranges_no = 0;
 
-
-	let start_date: DateTime = DateTime.now().setLocale('pl');
-	let end_date: DateTime = DateTime.now().setLocale('pl').plus({ days: days });
+	let dates: Date[] =[];
 
 	const arrayRange = () =>
 		Array.from({ length: end_hour - start_hour }, (_, index) => start_hour + index);
@@ -43,7 +43,12 @@
 				</div>
 				<div class="mb-6">
 					<Label for="datepicker" class="mb-2">Dates range</Label>
-					<Datepicker range required />
+					<div class="flex justify-between">
+					<DateInput bind:value={dates[0]}/>
+					<input type="text" name="range-0" hidden bind:value={dates[0]}>
+					<DateInput bind:value={dates[1]}/>
+					<input type="text" name="range-1" hidden bind:value={dates[1]}>
+					</div> 
 				</div>
 				<Label class="mb-2">Hours range</Label>
 				<div class="mb-4 flex justify-center">
@@ -76,17 +81,22 @@
 						</Dropdown>
 					</div>
 				</div>
-				<!-- {#each Array(ranges_no) as _, i}
+				{#each Array(ranges_no) as _, i}
                         <div class="mb-6">
                             <div class="flex justify-between">
                                 <Label for="datepicker" class="mb-2">Range {i + 2}</Label>
                                 <CloseButton class="dark:text-gray-200 text-gray-700" on:click={() => {ranges_no--}} />
                             </div>
-                            <Datepicker range/>
+							<div class="flex justify-between">
+                            <DateInput bind:value={dates[2+i*2]}/>
+							<input type="text" name="range-{2+i*2}" hidden bind:value={dates[2+i*2]}>
+                            <DateInput bind:value={dates[2+i*2+1]}/>
+							<input type="text" name="range-{2+i*2+1}" hidden bind:value={dates[2+i*2+1]}>
+							</div> 
                         </div>
-                    {/each} -->
+                    {/each}
 				<div class="mt-4 flex justify-between">
-					<!-- <Button color="alternative" type="button" on:click={() => {ranges_no++}}>Add another range</Button> -->
+					<Button color="alternative" type="button" on:click={() => {ranges_no++}}>Add another range</Button>
 				</div>
 				<Button type="submit" class="mt-4 w-full">Create</Button>
 			</form>
