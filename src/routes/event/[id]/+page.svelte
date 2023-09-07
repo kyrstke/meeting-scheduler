@@ -17,7 +17,6 @@
     }, 0);
     }
     function calculateIntensity(avail){
-        console.log("recalculated")
         let usersNumber;
         if (data.users.length == 0){
             usersNumber = 1;
@@ -65,19 +64,17 @@
         <slot />
     </div>
     
-    <form method="POST" action="?/update" use:enhance >
-    <section class="bg-white dark:bg-gray-900" style="justify-content: center; vertical-align: middle;">
+    <form method="POST" action="?/update" >
+    <section class="bg-white dark:bg-gray-900" style=" display: flex; justify-content: space-evenly">
         
-        <div class="flex py-8 px-4 lg:py-16 lg:px-6" style="float:left;width: 40%;">
+        <div class="flex py-8 px-4 lg:py-16 lg:px-6" >
             <div class="HOURS-AND-PANELS flex text-sm dark:text-gray-400" style="vertical-align: middle;" >
-                <div class="HOURS flex flex-col text-right mr-2">
+                <div class="HOURS flex flex-col text-right mr-2" style="flex-direction: column; display: flex; justify-content: space-evenly">
                     {#each arrayRange() as hour}
-                        <div class="HALF-HOURS flex flex-col pl-5 h-17">
-                            <div class="-mt-3 mb-3.5">{hour}:00</div>
-                            <div class="">{hour}:30</div>
-                        </div>
+                            <div class="" >{hour}:00</div>
+                            <div class="" >{hour}:30</div>
                     {/each}
-                    <div class="LAST-HOUR -mt-3 pl-5">
+                    <div class="LAST-HOUR " >
                         <div>{end_hour}:00</div>
                     </div>
                 </div>
@@ -97,22 +94,19 @@
                 </div>
             </div>
         </div>
-        <div  class=" lg:py-16 lg:px-6" style="display: inline-block; float: left; width: 20% ; transform: translate(-50%, 0%); text-align: center;
-         justify-content: space-between;">
-            <Input name="user" value={user} placeholder="Name"></Input>
+        <div  class=" lg:py-16 lg:px-6" style="text-align: center; justify-content: space-evenly; flex-direction: column; display: flex;">
+            <Input name="user" value={user} placeholder="Name" required></Input>
             <Button><button on:click={calculateIntensity}>Send my availability</button></Button>
             <Button><button on:click={endEvent}> Finish Event</button></Button>
         </div>
-        <div class="flex py-8 px-4 lg:py-16 lg:px-6" style="float:right; width: 40%;" >
+        <div class="flex py-8 px-4 lg:py-16 lg:px-6" >
             <div class="HOURS-AND-PANELS flex text-sm dark:text-gray-400" >
-                <div class="HOURS flex flex-col text-right mr-2">
+                <div class="HOURS flex flex-col text-right mr-2" style="flex-direction: column; display: flex; justify-content: space-evenly">
                     {#each arrayRange() as hour}
-                        <div class="HALF-HOURS flex flex-col pl-5 h-17">
-                            <div class="-mt-3 mb-3.5">{hour}:00</div>
+                            <div class="">{hour}:00</div>
                             <div class="">{hour}:30</div>
-                        </div>
                     {/each}
-                    <div class="LAST-HOUR -mt-3 pl-5">
+                    <div class="LAST-HOUR ">
                         <div>{end_hour}:00</div>
                     </div>
                 </div>
