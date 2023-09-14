@@ -12,7 +12,7 @@
 	} from 'flowbite-svelte';
 	import { DateTime } from 'luxon';
 	import {DateInput} from 'date-picker-svelte';
-	function validate(){
+	const validate = async() =>{
 		let now = new Date()
 		if(end_hour < start_hour){
 			alert("End hour can't be earlier then start!")
@@ -26,6 +26,9 @@
 			// if (now.getDate() > dates[x].getDate() || now.getDate() > dates[x].getDate()){ //Do we want to make it possible?
 			// 	alert("Are you sure you want to create event in past?") 
 			// }
+		}
+		if(document!= null){
+			(document.getElementById("form") as HTMLFormElement)!.submit()
 		}
 	}
 	let timeNow = new Date();
@@ -52,7 +55,7 @@
 				>Find the best time for your meeting quicker than ever before</P>
 		</div>
 		<div class="flex justify-center">
-			<form method="POST" on:submit|preventDefault={validate}>
+			<form method="POST" on:submit|preventDefault={validate} id="form">
 				<div class="mb-6">
 					<Label for="event_name" class="mb-2">Event name</Label>
 					<Input type="text" id="event_name" name="event_name" placeholder="My event" required />
