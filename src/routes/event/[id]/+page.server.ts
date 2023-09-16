@@ -3,11 +3,12 @@ import { redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from './$types.js';
 import { DateTime } from "luxon";
 import { prevent_default } from "svelte/internal";
+import type { GetResult } from "@prisma/client/runtime/index.js";
 
-function replaceAt(str,index, replacement) {
+function replaceAt(str: string, index: any, replacement: string | any[]) {
     return str.substring(0, index) + replacement + str.substring(index + replacement.length);
 }
-function updateName(oldUsers,name){
+function updateName(oldUsers: string[], name: string){
     let newUsers = oldUsers
     if (newUsers.indexOf(name) == -1){
         newUsers.push(name);
@@ -15,11 +16,14 @@ function updateName(oldUsers,name){
     
     return newUsers;
 }
-function decToBin(dec){
+function decToBin(dec: number){
     return (dec >>> 0).toString(2);
 }
-function getNewAvailability(value,someoneCan,index){
+function getNewAvailability(value: (GetResult<{ id: string; createdAt: Date; name: string; min_hour: number; max_hour: number; days: Date[]; users: string[]; availability: number[]; }, unknown> & {}) | null,someoneCan: boolean[],index: number){
     let avail : number[] = [];
+    if (value == null){
+        return avail;
+    }
     for (var x in value.availability){
         let allAvail = decToBin(value.availability[x]);
         if (someoneCan[x]){
@@ -52,7 +56,7 @@ export const load =  (
  ) satisfies PageServerLoad;
 
  export const actions = {
-    update: async ({params,request}) => {
+    update: async ({params, request}) => {
         const data = await request.formData();
         let user_name = String(data.get("user"));
         let avail : boolean[] = [];
@@ -66,6 +70,9 @@ export const load =  (
                 id: params.id
             }
         })
+        if (value == null){
+            throw 500;
+        }
         var newlist: string[] = updateName(value.users,user_name);
         let index = newlist.indexOf(user_name);
         let newAvailability = getNewAvailability(value,avail,index);
