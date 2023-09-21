@@ -18,6 +18,6 @@ model Event {
   max_hour      Int
   days          DateTime[]
   users         String[]
-  availability  Int[]
+  availability  String[]
 }
 

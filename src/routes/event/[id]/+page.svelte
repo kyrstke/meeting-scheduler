@@ -1,23 +1,26 @@
 <script lang="ts">
-    import Navbar from '../../../components/Navbar.svelte';
-    import Footer from '../../../components/Footer.svelte';
-    import Panel from '../../../components/Panel.svelte';
-    import { Label, Input, Button, Datepicker, Heading, P, CloseButton, Dropdown, DropdownItem, } from 'flowbite-svelte';
-	import { DateTime } from "luxon";
+    import CombinedAvailability from '../../../components/CombinedAvailability.svelte';
+    import InputPanel from '../../../components/InputPanel.svelte';
+    import { Input, Button,} from 'flowbite-svelte';
     import type { PageData } from './$types';
-	import { enhance } from '$app/forms';
+	import type { DateTimeFormatOptions } from 'luxon';
     export let data: PageData;
+
+    console.log('data:', data)
+
     //Function declaration
-    function decToBin(dec){
-        return (dec >>> 0).toString(2);
+    function decToBin(dec: number){
+        return dec.toString(2);
     }
-    const sum = (arr) => {
-    return arr.reduce((total, current) => {
-        return total + parseInt(current);
-    }, 0);
+
+    const sum = (arr: any[]) => {
+        return arr.reduce((total: number, current: string) => {
+            return total + parseInt(current);
+        }, 0);
     }
-    function calculateIntensity(avail){
-        let usersNumber;
+
+    function calculateIntensity(avail: string | any[]){
+        let usersNumber: number;
         if (data.users.length == 0){
             usersNumber = 1;
         }
@@ -28,27 +31,35 @@
             summed[x] = (((sum(decToBin(avail[x]).split("")))/usersNumber)*0.8+0.1);
         }
     }
-    function endEvent(){
 
+    function endEvent(){
+        console.log("Event ended")
     }
 
+    function formatDate(date_string: string){
+        const options: DateTimeFormatOptions = { month: 'numeric', day: 'numeric' };
+        return new Date(date_string).toLocaleDateString(undefined, options)
+    }
 
     let user = "";
     let start_hour = data.min_hour;
     let end_hour = data.max_hour;
-    let start_date = data.days[0];
-    let end_date = data.days[data.days.length-1];
-    let days = data.days.length;
-    let hours = (end_hour-start_hour)*4
+    let start_day_number = data.days[0];
+    let end_day_number = data.days[data.days.length-1];
+    let n_days = data.days.length;
+    let n_panels = (end_hour-start_hour)*4
+
     let available: boolean[][] = new Array(data.days.length)
                                    .fill(false)
                                    .map(() => 
-                                     new Array(hours).fill(false)
+                                     new Array(n_panels).fill(false)
                                    );
+
     const arrayRange = () => Array.from(
             { length: (end_hour - start_hour) },
             (_, index) => start_hour + index
         );
+
     let avail: number[] = data.availability;
     let summed : number[] = [];
     
@@ -57,78 +68,90 @@
     }
     
     calculateIntensity(avail); //Values are not updated after every availability send
+
+    let current_hovered_panel = "";
+
+    function calculateIfUserIsAvailable(panel_id: string, user: string){
+        let day = parseInt(panel_id.split(" ")[0]);
+        let hour = parseInt(panel_id.split(" ")[1]);
+        let minute = parseInt(panel_id.split(" ")[2]);
+
+        let user_index = data.users.indexOf(user);
+        let panel_index = day * n_panels + (hour - start_hour) * 4 + minute
+
+        let bin = decToBin(avail[panel_index])
+
+        if (bin[user_index] == "1") {
+            return true;
+        } else {
+            return false;
+        }
+    }
 </script>
 
-<main class="min-h-screen flex flex-col bg-white dark:bg-gray-900">
-    <div class="flex-grow">
-        <slot />
-    </div>
+<main class="min-h-screen flex flex-col justify-center bg-white dark:bg-gray-900">
     
-    <form method="POST" action="?/update" >
-    <section class="bg-white dark:bg-gray-900" style=" display: flex; justify-content: space-evenly">
-        
-        <div class="flex py-8 px-4 lg:py-16 lg:px-6" >
-            <div class="HOURS-AND-PANELS flex text-sm dark:text-gray-400" style="vertical-align: middle;" >
-                <div class="HOURS flex flex-col text-right mr-2" style="flex-direction: column; display: flex; justify-content: space-evenly">
-                    {#each arrayRange() as hour}
-                            <div class="" >{hour}:00</div>
-                            <div class="" >{hour}:30</div>
-                    {/each}
-                    <div class="LAST-HOUR " >
-                        <div>{end_hour}:00</div>
-                    </div>
-                </div>
-                <div class="PANELS flex" >
-                    {#each Array(days) as _, day}
-                        <div class="-mt-7 mr-1 text-center">
-                            <div class="mb-2">{new Date(data.days[day]).toLocaleDateString()}</div>
-                            {#each arrayRange() as hour}
-                                <div id='buttons' class="flex flex-col mb-px" >
-                                    {#each Array(4) as _, minute}
-                                        <Panel id="{day} {hour} {minute}:TZ" active={available[day][minute+4*hour]} />
-                                    {/each}
-                                </div>
-                            {/each}
-                        </div>
-                    {/each}
-                </div>
-            </div>
-        </div>
-        <div  class=" lg:py-16 lg:px-6" style="text-align: center; justify-content: space-evenly; flex-direction: column; display: flex;">
-            <Input name="user" value={user} placeholder="Name" required></Input>
-            <Button><button on:click={calculateIntensity}>Send my availability</button></Button>
-            <Button><button on:click={endEvent}> Finish Event</button></Button>
-        </div>
-        <div class="flex py-8 px-4 lg:py-16 lg:px-6" >
-            <div class="HOURS-AND-PANELS flex text-sm dark:text-gray-400" >
-                <div class="HOURS flex flex-col text-right mr-2" style="flex-direction: column; display: flex; justify-content: space-evenly">
-                    {#each arrayRange() as hour}
+    <form method="POST" action="?/update">
+        <section class="flex justify-evenly bg-white dark:bg-gray-900 dark:text-gray-400">
+            
+            <div class="flex py-8 px-4 lg:py-16 lg:px-6" >
+                <div class="HOURS-AND-PANELS flex text-sm" style="vertical-align: middle;" >
+                    <div class="HOURS flex flex-col text-right mr-2 -mt-3 gap-[14.5px]">
+                        {#each arrayRange() as hour}
                             <div class="">{hour}:00</div>
                             <div class="">{hour}:30</div>
-                    {/each}
-                    <div class="LAST-HOUR ">
-                        <div>{end_hour}:00</div>
+                        {/each}
+                        <div class="LAST-HOUR">
+                            <div>{end_hour}:00</div>
+                        </div>
+                    </div>
+                    <div class="PANELS flex">
+                        {#each Array(n_days) as _, day}
+                            <div class="-mt-7 mr-1 text-center">
+                                <div class="mb-2">{formatDate(data.days[day])}</div>
+                                {#each arrayRange() as hour}
+                                    <div id='buttons' class="flex flex-col mb-px">
+                                        {#each Array(4) as _, minute}
+                                            <InputPanel id="{day} {minute} {hour}:TZ" active={available[day][(hour - start_hour) * 4 + minute]} />
+                                        {/each}
+                                    </div>
+                                {/each}
+                            </div>
+                        {/each}
                     </div>
                 </div>
-                <div class="PANELS flex">
-                    {#each Array(days) as _, day}
-                        <div class="-mt-7 mr-1 text-center">
-                            <div class="mb-2">{new Date(data.days[day]).toLocaleDateString()}</div>
-                            {#each arrayRange() as hour}
-                                <div id='buttons' class="flex flex-col mb-px">
-                                    {#each Array(4) as _, minute}
-                                    <button type="button" disabled class="rounded-sm overflow-hidden w-12 h-4 mb-px"
-                                    style="background-color:rgba(0, 175, 0, {summed[minute+4*(hour-start_hour)+hours*day]})"></button>
-                                    {/each}
-                                </div>
-                            {/each}
-                        </div>
-                    {/each}
+            </div>
+            <div class="lg:py-16 lg:px-6 flex flex-col justify-start text-center gap-4">
+                <Input name="user" value={user} placeholder="Enter your name here" required></Input>
+                <Button><button on:click={calculateIntensity}>Send my availability</button></Button>
+                <Button><button on:click={endEvent}>Finish Event</button></Button>
+            </div>
+            <!-- display two lists of users: available and unavailable on mouse_enter on a panel -->
+            <div class="lg:py-16 lg:px-6 flex justify-center text-center gap-4">
+                <div>
+                    <h1>Available</h1>
+                    <ul>
+                        {#each data.users as user}
+                            {#if current_hovered_panel != "" && calculateIfUserIsAvailable(current_hovered_panel, user)}
+                                <li>{user}</li>
+                            {/if}
+                        {/each}
+                    </ul>
+                </div>
+                <div>
+                    <h1>Unavailable</h1>
+                    <ul>
+                        {#each data.users as user}
+                            {#if current_hovered_panel != "" && !calculateIfUserIsAvailable(current_hovered_panel, user)}
+                                <li>{user}</li>
+                            {/if}
+                        {/each}
+                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
-        </form>
+            <CombinedAvailability {data} bind:current_hovered_panel />
+        </section>
+    </form>
 </main>
 
 

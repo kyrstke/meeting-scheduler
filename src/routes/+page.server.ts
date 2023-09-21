@@ -13,33 +13,32 @@ function getDatesInRange(startDate, endDate) {
     return dates;
   }
 // 1.
-function calculateDays(chosenDates){
+function calculateDays(chosenDates) {
     let days: Date[]=[];
     let newdays:Date[] =[];
-    for (var x = 0;x<chosenDates.length;x=x+2){
-        newdays =getDatesInRange(chosenDates[x],chosenDates[x+1])
-        days.push.apply(days,newdays);
+    for (var x = 0; x<chosenDates.length; x=x+2){
+        newdays = getDatesInRange(chosenDates[x], chosenDates[x+1])
+        days.push.apply(days, newdays);
     }
     
     const sorted = days.sort(
         (objA, objB) => objA.getTime() - objB.getTime(),
     );
     let reminder: number []=[];
-        let result = sorted.filter( item =>  {  
-        let date = item.getDate(); 
-        if(reminder.includes(date)) {       
-            return false;                    
-        }
-        reminder.push(date);                
-        return true;                        
+        let result = sorted.filter(item => {  
+            let date = item.getDate(); 
+            if(reminder.includes(date)) {       
+                return false;                    
+            }
+            reminder.push(date);                
+            return true;                        
         });
     return result;
 }
 
 export const actions =  {
     default: async ({request}) => {
-        let form = await request.formData();
-        
+        let form = await request.formData();    
         
         const data:any = {};
         let chosenDates :Date[] =[];
@@ -54,9 +53,9 @@ export const actions =  {
         let days = calculateDays(chosenDates);
 
         let hour_count = parseInt(data.end_hour)-parseInt(data.start_hour);
-        let avail:number[] = [];
-        for (let i =0;i<days.length*hour_count*4;i++){
-            avail[i] = 0;
+        let avail: string[] = [];
+        for (let i=0; i<days.length*hour_count*4; i++){
+            avail[i] = '';
         }
         
 

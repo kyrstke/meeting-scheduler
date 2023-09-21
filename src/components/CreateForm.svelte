@@ -10,15 +10,15 @@
 		Dropdown,
 		DropdownItem
 	} from 'flowbite-svelte';
-	import { DateTime } from 'luxon';
 	import {DateInput} from 'date-picker-svelte';
-	const validate = async() =>{
+
+	const validate = async() => {
 		let now = new Date()
-		if(end_hour < start_hour){
+		if (end_hour < start_hour){
 			alert("End hour can't be earlier then start!")
 			return false;
 		}
-		for(var x =0;x<dates.length;x=x+2){
+		for (var x=0; x<dates.length; x=x+2) {
 			if (dates[x].getDate() > dates[x+1].getDate()){
 				alert("End date in date range no "+ (x/2+1).toString() +" can't be earlier then start!")
 				return false;
@@ -27,12 +27,13 @@
 			// 	alert("Are you sure you want to create event in past?") 
 			// }
 		}
-		if(document!= null){
+		if (document != null) {
 			(document.getElementById("form") as HTMLFormElement)!.submit()
 		}
 	}
+
 	let timeNow = new Date();
-	let timeNowString = timeNow.getFullYear() +'-'+(timeNow.getMonth()+1)+'-'+timeNow.getDate(); 
+	let timeNowString = timeNow.getFullYear() + '-' + (timeNow.getMonth() + 1) + '-' + timeNow.getDate(); 
 	let start_hour = 8;
 	let end_hour = 16;
 	let start_hour_dropdown_open = false;
@@ -41,10 +42,9 @@
 	let days: number = 3;
 	let ranges_no = 0;
 
-	let dates: Date[] =[];
+	let dates: Date[] = [];
 
-	const arrayRange = () =>
-		Array.from({ length: end_hour - start_hour }, (_, index) => start_hour + index);
+	const arrayRange = () => Array.from({ length: end_hour - start_hour }, (_, index) => start_hour + index);
 </script>
 
 <section class="mb-auto bg-white dark:bg-gray-900">
@@ -71,8 +71,9 @@
 									on:click={() => {
 										start_hour = i;
 										start_hour_dropdown_open = false;
-									}}>{i}:00</DropdownItem
-								>
+									}}>
+									{i}:00
+								</DropdownItem>
 							{/each}
 						</Dropdown>
 					</div>
@@ -107,10 +108,10 @@
                                 <CloseButton class="dark:text-gray-200 text-gray-700" on:click={() => {ranges_no--}} />
                             </div>
 							<div class="flex justify-between" style="position: relative">
-                            <DateInput bind:value={dates[2+i*2]} format="yyyy-MM-dd" placeholder="{timeNowString}" min={timeNow}/>
-							<input type="text" name="range-{2+i*2}" bind:value={dates[2+i*2]} required style="opacity: 0; width:0; position: absolute; left: 20px">
-                            <DateInput bind:value={dates[2+i*2+1]} format="yyyy-MM-dd" placeholder="{timeNowString}" min={timeNow}/>
-							<input type="text" name="range-{2+i*2+1}" bind:value={dates[2+i*2+1]} required style="opacity: 0; width:0; position: absolute; right:125px">
+								<DateInput bind:value={dates[2+i*2]} format="yyyy-MM-dd" placeholder="{timeNowString}" min={timeNow}/>
+								<input type="text" name="range-{2+i*2}" bind:value={dates[2+i*2]} required style="opacity: 0; width:0; position: absolute; left: 20px">
+								<DateInput bind:value={dates[2+i*2+1]} format="yyyy-MM-dd" placeholder="{timeNowString}" min={timeNow}/>
+								<input type="text" name="range-{2+i*2+1}" bind:value={dates[2+i*2+1]} required style="opacity: 0; width:0; position: absolute; right:125px">
 							</div> 
                         </div>
                     {/each}
@@ -122,10 +123,4 @@
 		</div>
 	</div>
 </section>
-
-<style>
-	.h-17 {
-		height: 4.3125rem;
-	}
-</style>
 
