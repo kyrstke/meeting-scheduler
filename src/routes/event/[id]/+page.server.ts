@@ -1,8 +1,4 @@
 import prisma from "$lib/prisma.js";
-import { redirect } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from './$types.js';
-import { DateTime } from "luxon";
-import { prevent_default } from "svelte/internal";
 
 function replaceAt(str: string, index: number, replacement: string) {
     return str.substring(0, index) + replacement + str.substring(index + replacement.length);
@@ -24,7 +20,7 @@ function getNewAvailability(value, someoneCan: boolean[], index: number){
     }
     for (var x in value.availability){
         let allAvail = value.availability[x];
-        if (someoneCan[x]){
+        if (someoneCan[x]) {
             allAvail =  replaceAt(allAvail, index, '1');
         }
         else{
@@ -35,23 +31,6 @@ function getNewAvailability(value, someoneCan: boolean[], index: number){
     return avail;
 
 }
-
-export const load =  (
-    async ({params}) => {
-    
-        var event = await prisma.event.findUnique({
-            where:{
-                id: params.id
-            }
-        })
-        if (event == null){
-            throw 500;
-        }
-        return event;
-
-    // 3.
-    }
-) satisfies PageServerLoad;
 
  export const actions = {
     update: async ({params, request}) => {
