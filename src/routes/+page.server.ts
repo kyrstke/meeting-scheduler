@@ -4,8 +4,12 @@ import type { Actions } from './$types.js';
 import { DateTime } from "luxon";
 
 function getDatesInRange(startDate, endDate) {
+    //check type of startDate and endDate
+    if (!(startDate instanceof Date) || !(endDate instanceof Date)) {
+        throw new TypeError("Invalid argument type");
+    }
     const date = new Date(startDate.getTime());
-    const dates: Date[] =[];
+    const dates: Date[] = [];
     while (date <= endDate) {
         dates.push(new Date(date));
         date.setDate(date.getDate() + 1);
@@ -13,10 +17,10 @@ function getDatesInRange(startDate, endDate) {
     return dates;
   }
 // 1.
-function calculateDays(chosenDates) {
+function calculateDays(chosenDates: Date[]) {
     let days: Date[]=[];
-    let newdays:Date[] =[];
-    for (var x = 0; x<chosenDates.length; x=x+2){
+    let newdays: Date[] =[];
+    for (var x=0; x<chosenDates.length; x=x+2){
         newdays = getDatesInRange(chosenDates[x], chosenDates[x+1])
         days.push.apply(days, newdays);
     }
@@ -24,6 +28,7 @@ function calculateDays(chosenDates) {
     const sorted = days.sort(
         (objA, objB) => objA.getTime() - objB.getTime(),
     );
+
     let reminder: number []=[];
         let result = sorted.filter(item => {  
             let date = item.getDate(); 
@@ -40,8 +45,8 @@ export const actions =  {
     default: async ({request}) => {
         let form = await request.formData();    
         
-        const data:any = {};
-        let chosenDates :Date[] =[];
+        const data: any = {};
+        let chosenDates: Date[] = [];
         for (let field of form) {
             const [key, value] = field;
             data[key] = value;
@@ -63,7 +68,7 @@ export const actions =  {
     const newEvent = await prisma.event.create({
         data: {
             name: data.event_name,
-            createdAt:  (DateTime.now()).toString(),
+            createdAt: (DateTime.now()).toString(),
             min_hour: parseInt(data.start_hour),
             max_hour: parseInt(data.end_hour),
             days: days,

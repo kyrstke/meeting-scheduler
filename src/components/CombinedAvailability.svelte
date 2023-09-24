@@ -208,7 +208,7 @@
         {:else}
             <div class="flex flex-col gap-2 pb-4">
                 <Heading tag="h5">Legend</Heading>
-                <div class="text-sm text-gray-400">Mouseover a panel to see who is available</div>
+                <div class="text-sm">Mouseover a panel to see who is available</div>
             </div>
             <!-- <Heading tag="h5">{day} {hour} {minute}</Heading> -->
                 <!-- <Heading tag="h5" class="">Legend</Heading> -->

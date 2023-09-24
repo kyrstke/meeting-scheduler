@@ -1,6 +1,5 @@
 <script lang="ts">
     import { Button } from 'flowbite-svelte';
-    import Title from '../../../components/Title.svelte';
     import { Heading, P } from 'flowbite-svelte';
 </script>
 
