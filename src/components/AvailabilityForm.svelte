@@ -17,6 +17,7 @@
     }
 
     let user = "";
+    let mail = "";
     let start_hour = data.min_hour;
     let end_hour = data.max_hour;
     let n_days = data.days.length;
@@ -69,6 +70,7 @@
     <div class="py-6 px-4 sm:py-12 lg:px-6 flex flex-col justify-start text-center gap-1 w-[200px] text-xs lg:w-[250px] sm:text-base">
         {#if showAvForm}
             <Input name="user" value={user} placeholder="Name" required></Input>
+            <Input name="mail" value={mail} placeholder="mail@mail.com"></Input>
             <Button type="submit">Submit availabilty</Button>
         {/if}
         <Button on:click={() => showAvForm = !showAvForm} class="mb-2 sm:mb-4">{showAvForm ? "Hide form" : "Show form"}</Button>

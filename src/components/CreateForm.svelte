@@ -38,7 +38,7 @@
 	let end_hour = 16;
 	let start_hour_dropdown_open = false;
 	let end_hour_dropdown_open = false;
-
+	let end_date: Date;
 	let days: number = 3;
 	let ranges_no = 0;
 
@@ -59,6 +59,15 @@
 				<div class="mb-6">
 					<Label for="event_name" class="mb-2">Event name</Label>
 					<Input type="text" id="event_name" name="event_name" placeholder="My event" required />
+				</div>
+				<div class="mb-6">
+					<Label for="mail" class="mb-2">Email</Label>
+					<Input type="email" id="mail" name="mail" placeholder="mail@mail.com" required />
+				</div>
+				<Label class="mb-2 mr-2 flex justify-center">End Date</Label>
+				<div class="mb-6 flex justify-center">
+					<DateInput bind:value={end_date} format="yyyy-MM-dd" placeholder="{timeNowString}" min={timeNow}/>
+					<input type="text" name="end_date" bind:value={end_date} required style="opacity: 0; width:0; position: absolute">
 				</div>
 				<Label class="mb-2">Hours range</Label>
 				<div class="mb-4 flex justify-center">
