@@ -66,6 +66,7 @@
 
     function handleMouseEnter(event) {
         current_hovered_panel = event.detail.id;
+        console.log('current_hovered_panel', current_hovered_panel);
     }
 
     function handleMouseLeave(){
@@ -89,6 +90,26 @@
         } else {
             return false;
         }
+    }
+
+    function calculateNAvailUsersForPanel() {
+        let bin = avail[panel_index];
+        return sumOnes(bin);
+    }
+
+    const nAvailUsersSet = () => {
+        const set = new Set(n_avail_users);
+        console.log('nAvailUsersSet', set);
+        let arr = Array.from(set).sort((a, b) => b - a);
+        console.log('nAvailUsersSet', arr);
+        return arr;
+    }
+
+    const colorIntensitySet = () => {
+        const set = new Set(colorIntensity);
+        const array = Array.from(set).sort((a, b) => b - a);
+        console.log('colorIntensity', array);
+        return array;
     }
 
     // if data is undefined, set it to empty object
@@ -121,6 +142,7 @@
 
     let avail: string[] = data.availability;
     let n_avail_users: number[] = calculateNAvailUsers();
+    const n_avail_users_set = nAvailUsersSet();
     let max_n_avail_users = max(n_avail_users_set);
     let min_n_avail_users = min(n_avail_users_set);
     console.log('max_n_avail_users', max_n_avail_users);
@@ -138,7 +160,7 @@
             <div class="HOURS flex flex-col text-right mr-2 -mt-3 gap-[14.5px]">
                 {#each arrayRange() as hour}
                         <div class="">{hour}:00</div>
-                        <div class="">{hour}:25</div>
+                        <div class="">{hour}:30</div>
                 {/each}
                 <div class="LAST-HOUR">
                     <div>{end_hour}:00</div>
@@ -173,7 +195,7 @@
             <!-- <Heading tag="h5">{day} {hour} {minute}</Heading> -->
             <div class="flex justify-evenly w-[20rem] lg:w-[25rem] text-white text-base">
                 <div class="">
-                    <Heading tag="h6">Available</Heading>
+                    <Heading tag="h6">Available ({calculateNAvailUsersForPanel()})</Heading>
                     <ul>
                         {#each data.users as user}
                             {#if current_hovered_panel != "" && calculateIfUserIsAvailable(user)}
@@ -183,7 +205,7 @@
                     </ul>
                 </div>
                 <div>
-                    <Heading tag="h6">Unavailable</Heading>
+                    <Heading tag="h6">Unavailable ({min_n_avail_users})</Heading>
                     <ul>
                         {#each data.users as user}
                             {#if current_hovered_panel != "" && !calculateIfUserIsAvailable(user)}
