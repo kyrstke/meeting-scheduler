@@ -31,7 +31,7 @@
         }, Infinity);
     }
 
-    function calculateNAvailUsers(avail: string[]) {
+    function calculateNAvailUsers() {
         let n_avail_users: number[] = [];
         for (let x=0; x<avail.length; x++) {
             n_avail_users[x] = sumOnes(avail[x]);
@@ -39,10 +39,22 @@
         return n_avail_users;
     }
 
-    function calculateIntensity(n_avail_users: number[], max_n_avail_users: number) {
+    function calculateIntensity() {
         let colorIntensity: number[] = [];
+        const delta = max_n_avail_users - min_n_avail_users;
+        const exponent = 1.5;
+
         for (let x=0; x<n_avail_users.length; x++) {
-            colorIntensity[x] = (n_avail_users[x]/max_n_avail_users) * 0.9 + 0.1;
+            let cur_avail_users = n_avail_users[x];
+            if (cur_avail_users == max_n_avail_users) {
+                colorIntensity[x] = 1;
+                continue;
+            } else if (cur_avail_users == min_n_avail_users) {
+                colorIntensity[x] = 0.07;
+                continue;
+            }
+            const normalizedValue = (n_avail_users[x] - min_n_avail_users) / delta;
+            colorIntensity[x] = Math.pow(normalizedValue, exponent) * 0.7 + 0.1;
         }
         return colorIntensity;
     }
@@ -108,37 +120,13 @@
         );
 
     let avail: string[] = data.availability;
-    let n_avail_users: number[] = calculateNAvailUsers(avail);
-
-    const nAvailUsersSet = (n_avail_users: number[]) => {
-        const set = new Set(n_avail_users);
-        console.log('nAvailUsersSet', set);
-        let arr = Array.from(set).sort((a, b) => b - a);
-        console.log('nAvailUsersSet', arr);
-        return arr;
-    }
-
-    const n_avail_users_set = nAvailUsersSet(n_avail_users);
-
+    let n_avail_users: number[] = calculateNAvailUsers();
     let max_n_avail_users = max(n_avail_users_set);
     let min_n_avail_users = min(n_avail_users_set);
     console.log('max_n_avail_users', max_n_avail_users);
     console.log('min_n_avail_users', min_n_avail_users);
 
-    let colorIntensity: number[] = calculateIntensity(n_avail_users, max_n_avail_users);
-
-    const colorIntensitySet = () => {
-        for (let x=0; x<data.availability.length; x++){
-            colorIntensity.push(0);
-        }
-        
-         //Values are not updated after every availability send
-
-        const set = new Set(colorIntensity);
-        console.log('colorIntensity', set);
-        return Array.from(set).sort((a, b) => b - a);
-    }
-
+    let colorIntensity: number[] = calculateIntensity();
     const color_intensity_set = colorIntensitySet();
     console.log('color_intensity_values', color_intensity_set);
 
