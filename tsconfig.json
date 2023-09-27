@@ -13,6 +13,12 @@
 		"strict": true,
 		"moduleResolution": "nodenext",
 		"noImplicitAny": false,
+	},
+	"ts-node": {
+	  // these options are overrides used only by ts-node
+	  "compilerOptions": {
+		"module": "es6"
+	  },
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//

@@ -36,6 +36,7 @@ function getNewAvailability(value, someoneCan: boolean[], index: number){
     update: async ({params, request}) => {
         const data = await request.formData();
         let user_name = String(data.get("user"));
+        let mail = String(data.get("mail"));
         let avail: boolean[] = [];
         for (const key of data.keys()) {
             if (key.includes(':TZ')){
@@ -54,15 +55,31 @@ function getNewAvailability(value, someoneCan: boolean[], index: number){
         let index = newlist.indexOf(user_name);
         let newAvailability = getNewAvailability(value, avail, index);
 
-        var event = await prisma.event.update({
-            where:{
-                id: params.id
-            },
-            data: {
-                users: newlist,
-                availability: newAvailability
+        if (mail != null){
+            var event = await prisma.event.update({
+                where:{
+                    id: params.id
                 },
-            
-        })
+                data: {
+                    users: newlist,
+                    availability: newAvailability,
+                    emails: {
+                        push: mail
+                    }
+                    },
+                
+            })
+        }
+        else{
+            var event = await prisma.event.update({
+                where:{
+                    id: params.id
+                },
+                data: {
+                    users: newlist,
+                    availability: newAvailability
+                    },
+            })            
+        }
     },
   };

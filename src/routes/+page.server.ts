@@ -69,10 +69,12 @@ export const actions =  {
         data: {
             name: data.event_name,
             createdAt: (DateTime.now()).toString(),
+            endDate: new Date(data.end_date),
             min_hour: parseInt(data.start_hour),
             max_hour: parseInt(data.end_hour),
             days: days,
             users: [],
+            emails: [data.mail],
             availability: avail
         }
 
