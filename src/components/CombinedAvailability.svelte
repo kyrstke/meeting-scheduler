@@ -4,8 +4,15 @@
     import { Heading, P } from 'flowbite-svelte';
 	import type { DateTimeFormatOptions } from 'luxon';
 
+    interface BestTimeInfo {
+        best_time: string;
+        best_time_n_users: number;
+    }
+
     export let data: PageData;
     export let current_hovered_panel: string = "";
+    // export let bestTime: string = "";
+    // export let best_time_n_users: number = 0;
 
     $: showDateOnHover = current_hovered_panel != "";
 
@@ -78,7 +85,7 @@
         const month = date.getMonth();
         const year = date.getFullYear();
         const options: DateTimeFormatOptions = { weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-        return new Date(year, month, day, hour, minute*15).toLocaleDateString(undefined, options)
+        return new Date(year, month, day, hour, minute*15).toLocaleDateString(undefined, options);
     }
 
     function calculateIfUserIsAvailable(user: string){
@@ -92,8 +99,10 @@
         }
     }
 
-    function calculateUsersForPanel(char: string = "1") {
+    function calculateUsersForPanel(panel_index: number, char: string = "1") {
+        console.log('panel_index', panel_index)
         let bin = avail[panel_index];
+        console.log('bin', bin);
         return sumChars(bin, char);
     }
 
@@ -110,6 +119,26 @@
         const array = Array.from(set).sort((a, b) => b - a);
         console.log('colorIntensity', array);
         return array;
+    }
+
+    function findBestTime(): BestTimeInfo {
+        let best_time = "";
+        let best_time_n_users = 0;
+        
+        const options: DateTimeFormatOptions = { weekday: 'short', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+        for (let x=0; x<n_avail_users.length; x++) {
+            if (n_avail_users[x] > best_time_n_users) {
+                best_time_n_users = n_avail_users[x];
+                const date: Date = data.days[Math.floor(x/n_panels)];
+                const day = date.getDate();
+                const month = date.getMonth();
+                const year = date.getFullYear();
+                const hour = start_hour + Math.floor((x % n_panels) / 4);
+                const minute = (x % 4) * 15;
+                best_time = new Date(year, month, day, hour, minute).toLocaleDateString(undefined, options);
+            }
+        }
+        return {"best_time": best_time, "best_time_n_users": best_time_n_users};
     }
 
     // if data is undefined, set it to empty object
@@ -152,6 +181,7 @@
     const color_intensity_set = colorIntensitySet();
     console.log('color_intensity_values', color_intensity_set);
 
+    export const bestTimeInfo: BestTimeInfo = findBestTime();
 </script>
 
 <div class="flex flex-wrap justify-evenly">   
@@ -189,13 +219,13 @@
         </div>
     </div>
 
-    <div class="QUICK SUMMARY px-2 py-8 flex flex-col text-center lg:px-8 w-[20rem] lg:w-[25rem]">
+    <div class="QUICK SUMMARY px-2 py-8 sm:py-10 flex flex-col text-center lg:px-8 w-[20rem] lg:w-[25rem]">
         {#if showDateOnHover}
             <Heading tag="h5" class="pb-8 w-[20rem] lg:w-[25rem]">{formatDateAndTime(data.days[day], hour, minute)}</Heading>
             <!-- <Heading tag="h5">{day} {hour} {minute}</Heading> -->
             <div class="flex justify-evenly w-[20rem] lg:w-[25rem] text-white text-base">
                 <div class="">
-                    <Heading tag="h6">Available ({calculateUsersForPanel()})</Heading>
+                    <Heading tag="h6">Available ({calculateUsersForPanel(panel_index)})</Heading>
                     <ul>
                         {#each data.users as user}
                             {#if current_hovered_panel != "" && calculateIfUserIsAvailable(user)}
@@ -205,7 +235,7 @@
                     </ul>
                 </div>
                 <div>
-                    <Heading tag="h6">Unavailable ({calculateUsersForPanel("0")})</Heading>
+                    <Heading tag="h6">Unavailable ({calculateUsersForPanel(panel_index, "0")})</Heading>
                     <ul>
                         {#each data.users as user}
                             {#if current_hovered_panel != "" && !calculateIfUserIsAvailable(user)}
