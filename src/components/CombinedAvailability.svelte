@@ -50,11 +50,11 @@
                 colorIntensity[x] = 1;
                 continue;
             } else if (cur_avail_users == min_n_avail_users) {
-                colorIntensity[x] = 0.07;
+                colorIntensity[x] = 0.05;
                 continue;
             }
             const normalizedValue = (n_avail_users[x] - min_n_avail_users) / delta;
-            colorIntensity[x] = Math.pow(normalizedValue, exponent) * 0.7 + 0.1;
+            colorIntensity[x] = Math.pow(normalizedValue, exponent) * 0.8 + 0.1;
         }
         return colorIntensity;
     }
