@@ -7,8 +7,8 @@
     console.log('data:', data)
 </script>
 
-<main class="min-h-screen flex flex-col justify-center bg-white dark:bg-gray-900">
-    <section class="flex justify-evenly bg-white dark:bg-gray-900 dark:text-gray-400">
+<main class="min-h-screen flex flex-col justify-center">
+    <section class="flex justify-evenly dark:text-gray-400">
         <CombinedAvailability {data}/>
     </section>
 </main>

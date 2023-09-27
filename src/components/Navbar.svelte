@@ -9,7 +9,7 @@
     } from 'flowbite-svelte';
 </script>
 
-<Navbar let:hidden let:toggle>
+<Navbar let:hidden let:toggle class="bg-slate-100">
     <NavBrand href="/">
         <img
             src="https://flowbite.com/docs/images/logo.svg"

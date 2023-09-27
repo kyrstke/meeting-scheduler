@@ -5,7 +5,7 @@
 </script>
 
 
-<section class="flex justify-center bg-white dark:bg-gray-900">
+<section class="flex justify-center">
   <div class="my-8 mx-4 px-auto max-w-screen-xl lg:mt-16 lg:mx-6 flex justify-center">
     <div class="text-center">
       <Heading tag="h1" class="mb-4">Meeting Scheduler</Heading>

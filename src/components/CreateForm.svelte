@@ -47,7 +47,7 @@
 	const arrayRange = () => Array.from({ length: end_hour - start_hour }, (_, index) => start_hour + index);
 </script>
 
-<section class="mb-auto bg-white dark:bg-gray-900">
+<section class="mb-auto">
 	<div class="mx-auto max-w-screen-xl px-4 mt-8 lg:px-6 lg:my-12">
 		<div class="flex flex-wrap justify-center text-center">
 			<Heading tag="h2" class="mb-4">Create an event</Heading>
