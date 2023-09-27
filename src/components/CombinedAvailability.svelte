@@ -9,10 +9,10 @@
 
     $: showDateOnHover = current_hovered_panel != "";
 
-    function sumOnes(bin: string){
+    function sumChars(bin: string, char: string = "1"){
         let sum = 0;
         for (let i = 0; i < bin.length; i++){
-            if (bin[i] == "1"){
+            if (bin[i] == char){
                 sum += 1;
             }
         }
@@ -34,7 +34,7 @@
     function calculateNAvailUsers() {
         let n_avail_users: number[] = [];
         for (let x=0; x<avail.length; x++) {
-            n_avail_users[x] = sumOnes(avail[x]);
+            n_avail_users[x] = sumChars(avail[x]);
         }
         return n_avail_users;
     }
@@ -92,9 +92,9 @@
         }
     }
 
-    function calculateNAvailUsersForPanel() {
+    function calculateUsersForPanel(char: string = "1") {
         let bin = avail[panel_index];
-        return sumOnes(bin);
+        return sumChars(bin, char);
     }
 
     const nAvailUsersSet = () => {
@@ -195,7 +195,7 @@
             <!-- <Heading tag="h5">{day} {hour} {minute}</Heading> -->
             <div class="flex justify-evenly w-[20rem] lg:w-[25rem] text-white text-base">
                 <div class="">
-                    <Heading tag="h6">Available ({calculateNAvailUsersForPanel()})</Heading>
+                    <Heading tag="h6">Available ({calculateUsersForPanel()})</Heading>
                     <ul>
                         {#each data.users as user}
                             {#if current_hovered_panel != "" && calculateIfUserIsAvailable(user)}
@@ -205,7 +205,7 @@
                     </ul>
                 </div>
                 <div>
-                    <Heading tag="h6">Unavailable ({min_n_avail_users})</Heading>
+                    <Heading tag="h6">Unavailable ({calculateUsersForPanel("0")})</Heading>
                     <ul>
                         {#each data.users as user}
                             {#if current_hovered_panel != "" && !calculateIfUserIsAvailable(user)}
