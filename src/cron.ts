@@ -54,7 +54,7 @@ return {"best_time": best_time, "best_time_n_users": best_time_n_users};
 
 const prisma = new PrismaClient()
 
-cron.schedule('*/10 * * * * *', async () => {
+cron.schedule('0 0 * * *', async () => {
 const date = new Date();
 
 console.log(`This task is running every day at midnight - ${date.getHours()}:${date.getMinutes()}`);
