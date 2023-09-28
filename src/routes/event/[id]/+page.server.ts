@@ -55,7 +55,7 @@ function getNewAvailability(value, someoneCan: boolean[], index: number){
         let index = newlist.indexOf(user_name);
         let newAvailability = getNewAvailability(value, avail, index);
 
-        if (mail != null){
+        if (mail != ""){
             var event = await prisma.event.update({
                 where:{
                     id: params.id

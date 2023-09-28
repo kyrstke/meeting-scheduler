@@ -223,7 +223,7 @@
         {#if showDateOnHover}
             <Heading tag="h5" class="pb-8 w-[20rem] lg:w-[25rem]">{formatDateAndTime(data.days[day], hour, minute)}</Heading>
             <!-- <Heading tag="h5">{day} {hour} {minute}</Heading> -->
-            <div class="flex justify-evenly w-[20rem] lg:w-[25rem] text-white text-base">
+            <div class="flex justify-evenly w-[20rem] lg:w-[25rem] text-base">
                 <div class="">
                     <Heading tag="h6">Available ({calculateUsersForPanel(panel_index)})</Heading>
                     <ul>

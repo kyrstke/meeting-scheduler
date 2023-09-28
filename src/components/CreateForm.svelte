@@ -19,7 +19,7 @@
 			return false;
 		}
 		for (var x=0; x<dates.length; x=x+2) {
-			if (dates[x].getDate() > dates[x+1].getDate()){
+			if (dates[x] > dates[x+1]){
 				alert("End date in date range no "+ (x/2+1).toString() +" can't be earlier then start!")
 				return false;
 			}
